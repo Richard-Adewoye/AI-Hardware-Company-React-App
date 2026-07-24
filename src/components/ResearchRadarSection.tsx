@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Compass, Calendar, ArrowUpRight, FileText, ChevronDown, Sparkles, CheckCircle2 } from 'lucide-react';
+import { NetworkingWheel } from './NetworkingWheel';
 
 interface Milestone {
   id: string;
@@ -217,6 +218,11 @@ export const ResearchRadarSection: React.FC<ResearchRadarSectionProps> = ({
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Embedded Connected Company Member Networking Wheel */}
+      <div className="mt-8 pt-8 border-t border-neutral-200/60 dark:border-slate-800">
+        <NetworkingWheel isDarkMode={isDarkMode} />
       </div>
     </motion.section>
   );
