@@ -30,6 +30,7 @@ interface ModalsProps {
   selectedProject: Project | null;
   onSelectCompany: (company: Company) => void;
   onAddReview: (review: Review) => void;
+  isDarkMode?: boolean;
 }
 
 export const Modals: React.FC<ModalsProps> = ({
@@ -43,6 +44,7 @@ export const Modals: React.FC<ModalsProps> = ({
   selectedProject,
   onSelectCompany,
   onAddReview,
+  isDarkMode = false,
 }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [promptCategoryFilter, setPromptCategoryFilter] = useState<string>('All');
@@ -84,13 +86,23 @@ export const Modals: React.FC<ModalsProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-neutral-200 overflow-hidden max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
+      <div
+        className={`relative w-full max-w-2xl rounded-3xl overflow-hidden max-h-[90vh] flex flex-col border transition-colors ${
+          isDarkMode
+            ? 'bg-slate-900 border-cyan-500/40 text-slate-100 shadow-[0_0_40px_rgba(6,182,212,0.25)]'
+            : 'bg-white border-neutral-200 shadow-2xl text-neutral-900'
+        }`}
+      >
         {/* Modal Header */}
-        <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/80">
+        <div
+          className={`px-6 py-4 border-b flex items-center justify-between ${
+            isDarkMode ? 'bg-slate-950/80 border-slate-800' : 'bg-neutral-50/80 border-neutral-100'
+          }`}
+        >
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-neutral-900" />
-            <h2 className="text-base font-bold text-neutral-900 capitalize">
+            <span className={`w-2 h-2 rounded-full ${isDarkMode ? 'bg-cyan-400 animate-ping' : 'bg-neutral-900'}`} />
+            <h2 className={`text-base font-bold capitalize ${isDarkMode ? 'text-cyan-300' : 'text-neutral-900'}`}>
               {activeModal === 'all-companies' && 'AI Companies Directory'}
               {activeModal === 'portfolio' && 'Featured AI & 3D Portfolio'}
               {activeModal === 'download-app' && 'Download Aempore Mobile App'}
@@ -105,7 +117,11 @@ export const Modals: React.FC<ModalsProps> = ({
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-neutral-200 text-neutral-500 hover:text-neutral-900 transition-colors"
+            className={`p-1.5 rounded-full transition-colors ${
+              isDarkMode
+                ? 'hover:bg-slate-800 text-slate-400 hover:text-cyan-300'
+                : 'hover:bg-neutral-200 text-neutral-500 hover:text-neutral-900'
+            }`}
           >
             <X className="w-5 h-5" />
           </button>

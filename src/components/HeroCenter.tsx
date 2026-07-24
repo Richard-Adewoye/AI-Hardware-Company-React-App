@@ -7,6 +7,7 @@ interface HeroCenterProps {
   onDownloadApp: () => void;
   onSeeReviews: () => void;
   onVisitWebsite: () => void;
+  isDarkMode?: boolean;
 }
 
 export const HeroCenter: React.FC<HeroCenterProps> = ({
@@ -14,11 +15,22 @@ export const HeroCenter: React.FC<HeroCenterProps> = ({
   onDownloadApp,
   onSeeReviews,
   onVisitWebsite,
+  isDarkMode = false,
 }) => {
   return (
-    <div className="bg-white/90 backdrop-blur-md border border-neutral-200/90 rounded-[28px] p-5 sm:p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow duration-300 w-full min-h-[640px]">
+    <div
+      className={`backdrop-blur-md rounded-[28px] p-5 sm:p-6 flex flex-col justify-between transition-all duration-300 w-full min-h-[640px] border ${
+        isDarkMode
+          ? 'bg-slate-900/90 border-cyan-500/30 text-slate-100 shadow-[0_0_20px_rgba(6,182,212,0.12)] hover:border-cyan-500/50 hover:shadow-[0_0_25px_rgba(6,182,212,0.2)]'
+          : 'bg-white/90 border-neutral-200/90 text-neutral-900 shadow-sm hover:shadow-md'
+      }`}
+    >
       {/* Hero Image Block Container */}
-      <div className="relative w-full rounded-2xl overflow-hidden bg-neutral-100 aspect-[4/3] sm:aspect-[16/11] border border-neutral-200/60 group">
+      <div
+        className={`relative w-full rounded-2xl overflow-hidden aspect-[4/3] sm:aspect-[16/11] border group ${
+          isDarkMode ? 'bg-slate-950 border-cyan-500/30' : 'bg-neutral-100 border-neutral-200/60'
+        }`}
+      >
         <img
           src={currentProject.imageUrl}
           alt={currentProject.title}
@@ -28,10 +40,20 @@ export const HeroCenter: React.FC<HeroCenterProps> = ({
 
         {/* Top-Left Overlay Tag: "03" + "Recent Project" */}
         <div className="absolute top-4 left-4 flex flex-col gap-0.5 pointer-events-none">
-          <span className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight drop-shadow-md">
+          <span
+            className={`text-4xl sm:text-5xl font-extrabold tracking-tight drop-shadow-md ${
+              isDarkMode ? 'text-cyan-300 drop-shadow-[0_0_12px_rgba(6,182,212,0.8)]' : 'text-white'
+            }`}
+          >
             {currentProject.number}
           </span>
-          <span className="text-[11px] font-medium text-white/90 bg-black/20 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/20 w-max shadow-2xs">
+          <span
+            className={`text-[11px] font-medium backdrop-blur-md px-2.5 py-0.5 rounded-full border w-max shadow-2xs ${
+              isDarkMode
+                ? 'text-cyan-200 bg-slate-950/70 border-cyan-500/40'
+                : 'text-white/90 bg-black/20 border-white/20'
+            }`}
+          >
             Recent Project
           </span>
         </div>
@@ -39,17 +61,35 @@ export const HeroCenter: React.FC<HeroCenterProps> = ({
         {/* Top-Right Overlay Widget: "Download App" + QR Code Icon */}
         <button
           onClick={onDownloadApp}
-          className="absolute top-4 right-4 flex items-center gap-2 bg-white/80 hover:bg-white text-neutral-800 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/60 shadow-sm transition-all hover:scale-105 active:scale-95 group/qr"
+          className={`absolute top-4 right-4 flex items-center gap-2 backdrop-blur-md px-3 py-1.5 rounded-xl border shadow-sm transition-all hover:scale-105 active:scale-95 group/qr ${
+            isDarkMode
+              ? 'bg-slate-900/90 border-cyan-500/40 text-slate-100 hover:bg-slate-900'
+              : 'bg-white/80 hover:bg-white border-white/60 text-neutral-800'
+          }`}
         >
           <div className="flex flex-col text-right">
-            <span className="text-[10px] font-bold tracking-tight text-neutral-900 leading-none">
+            <span
+              className={`text-[10px] font-bold tracking-tight leading-none ${
+                isDarkMode ? 'text-cyan-300' : 'text-neutral-900'
+              }`}
+            >
               Download
             </span>
-            <span className="text-[10px] font-semibold text-neutral-600 leading-none mt-0.5">
+            <span
+              className={`text-[10px] font-semibold leading-none mt-0.5 ${
+                isDarkMode ? 'text-slate-400' : 'text-neutral-600'
+              }`}
+            >
               App
             </span>
           </div>
-          <div className="p-1 rounded-md bg-neutral-900 text-white group-hover/qr:bg-black transition-colors">
+          <div
+            className={`p-1 rounded-md transition-colors ${
+              isDarkMode
+                ? 'bg-cyan-500 text-slate-950 group-hover/qr:bg-cyan-400'
+                : 'bg-neutral-900 text-white group-hover/qr:bg-black'
+            }`}
+          >
             <QrCode className="w-4 h-4" />
           </div>
         </button>
@@ -58,7 +98,13 @@ export const HeroCenter: React.FC<HeroCenterProps> = ({
       {/* Main Headline & Details Below Image */}
       <div className="mt-6 flex flex-col justify-between flex-1 gap-6">
         <div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-neutral-900 tracking-tight leading-[1.08] font-sans">
+          <h1
+            className={`text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-[1.08] font-sans ${
+              isDarkMode
+                ? 'bg-gradient-to-r from-white via-slate-100 to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+                : 'text-neutral-900'
+            }`}
+          >
             Futuristic <br />
             Machineries
           </h1>
@@ -67,7 +113,7 @@ export const HeroCenter: React.FC<HeroCenterProps> = ({
         {/* Middle Row: Left Tagline + Right User Avatars Review Badge */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="max-w-[180px]">
-            <p className="text-xs text-neutral-500 font-medium leading-tight">
+            <p className={`text-xs font-medium leading-tight ${isDarkMode ? 'text-slate-400' : 'text-neutral-500'}`}>
               Let's Bright the future by learning
             </p>
           </div>
@@ -75,7 +121,11 @@ export const HeroCenter: React.FC<HeroCenterProps> = ({
           {/* Member Avatars + See Reviews Button */}
           <button
             onClick={onSeeReviews}
-            className="flex items-center gap-2.5 bg-neutral-100/80 hover:bg-neutral-200/80 border border-neutral-200/80 px-3 py-1.5 rounded-full transition-all group shadow-2xs w-max"
+            className={`flex items-center gap-2.5 border px-3 py-1.5 rounded-full transition-all group shadow-2xs w-max ${
+              isDarkMode
+                ? 'bg-slate-800/80 hover:bg-slate-800 border-slate-700/80 text-slate-200 hover:border-cyan-500/40'
+                : 'bg-neutral-100/80 hover:bg-neutral-200/80 border-neutral-200/80 text-neutral-800'
+            }`}
           >
             {/* Avatar Stack */}
             <div className="flex -space-x-2 overflow-hidden">
@@ -92,9 +142,17 @@ export const HeroCenter: React.FC<HeroCenterProps> = ({
                 referrerPolicy="no-referrer"
               />
             </div>
-            <span className="text-xs font-semibold text-neutral-800 flex items-center gap-1">
+            <span
+              className={`text-xs font-semibold flex items-center gap-1 ${
+                isDarkMode ? 'text-cyan-300' : 'text-neutral-800'
+              }`}
+            >
               See Reviews
-              <ArrowRight className="w-3.5 h-3.5 text-neutral-600 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight
+                className={`w-3.5 h-3.5 group-hover:translate-x-1 transition-transform ${
+                  isDarkMode ? 'text-cyan-400' : 'text-neutral-600'
+                }`}
+              />
             </span>
           </button>
         </div>
@@ -103,10 +161,18 @@ export const HeroCenter: React.FC<HeroCenterProps> = ({
         <div className="pt-2">
           <button
             onClick={onVisitWebsite}
-            className="group flex items-center justify-between px-4 py-2.5 rounded-full bg-white border border-neutral-300 hover:border-neutral-900 text-neutral-900 text-xs font-semibold shadow-2xs transition-all hover:shadow-xs active:scale-[0.99] w-max sm:w-auto"
+            className={`group flex items-center justify-between px-4 py-2.5 rounded-full border text-xs font-semibold transition-all hover:shadow-xs active:scale-[0.99] w-max sm:w-auto ${
+              isDarkMode
+                ? 'bg-slate-900 border-cyan-500/50 hover:border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.25)] hover:shadow-[0_0_18px_rgba(6,182,212,0.4)]'
+                : 'bg-white border-neutral-300 hover:border-neutral-900 text-neutral-900 shadow-2xs'
+            }`}
           >
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-neutral-900" />
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  isDarkMode ? 'bg-cyan-400 animate-ping' : 'bg-neutral-900'
+                }`}
+              />
               <span>Visit website</span>
             </div>
             <ArrowRight className="w-3.5 h-3.5 ml-3 group-hover:translate-x-1 transition-transform" />

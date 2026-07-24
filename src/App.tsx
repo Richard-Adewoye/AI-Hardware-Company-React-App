@@ -18,6 +18,7 @@ export default function App() {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [selectedProjectForModal, setSelectedProjectForModal] = useState<Project | null>(null);
   const [viewMode, setViewMode] = useState<'desktop' | 'mobile-device' | 'stacked'>('desktop');
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   const heroProject = projects[0]; // Futuristic Machineries (03)
   const featuredProject = projects[1]; // Customer Segmentation (04)
@@ -32,30 +33,62 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3f2f0] text-neutral-900 font-sans selection:bg-neutral-900 selection:text-white relative overflow-x-hidden p-3 sm:p-6 md:p-8">
-      {/* Background Architectural Grid Lines */}
-      <div className="fixed inset-0 pointer-events-none opacity-40 z-0">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(0,0,0,0.03)" strokeWidth="1" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-          {/* Subtle curved background lines */}
-          <path
-            d="M -100 200 Q 400 100 800 600 T 1800 400"
-            fill="none"
-            stroke="rgba(0,0,0,0.02)"
-            strokeWidth="1.5"
-          />
-          <path
-            d="M 100 -50 Q 600 300 1200 100"
-            fill="none"
-            stroke="rgba(0,0,0,0.02)"
-            strokeWidth="1.5"
-          />
-        </svg>
+    <div
+      className={`min-h-screen font-sans relative overflow-x-hidden p-3 sm:p-6 md:p-8 transition-colors duration-500 ${
+        isDarkMode
+          ? 'bg-[#08090e] text-slate-100 selection:bg-cyan-400 selection:text-slate-950'
+          : 'bg-[#f3f2f0] text-neutral-900 selection:bg-neutral-900 selection:text-white'
+      }`}
+    >
+      {/* Background Architectural Grid Lines / Futuristic Cyber Glow */}
+      <div className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-500">
+        {isDarkMode ? (
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-[#08090e] to-[#040508]">
+            <svg className="w-full h-full opacity-30" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="grid-dark" width="60" height="60" patternUnits="userSpaceOnUse">
+                  <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(6,182,212,0.12)" strokeWidth="1" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid-dark)" />
+              <path
+                d="M -100 200 Q 400 100 800 600 T 1800 400"
+                fill="none"
+                stroke="rgba(6,182,212,0.15)"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M 100 -50 Q 600 300 1200 100"
+                fill="none"
+                stroke="rgba(16,185,129,0.12)"
+                strokeWidth="1.5"
+              />
+            </svg>
+          </div>
+        ) : (
+          <div className="absolute inset-0 opacity-40">
+            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                  <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(0,0,0,0.03)" strokeWidth="1" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)" />
+              <path
+                d="M -100 200 Q 400 100 800 600 T 1800 400"
+                fill="none"
+                stroke="rgba(0,0,0,0.02)"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M 100 -50 Q 600 300 1200 100"
+                fill="none"
+                stroke="rgba(0,0,0,0.02)"
+                strokeWidth="1.5"
+              />
+            </svg>
+          </div>
+        )}
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10 flex flex-col min-h-[calc(100vh-3rem)]">
@@ -65,6 +98,8 @@ export default function App() {
           onEcosystemClick={() => setActiveModal('ecosystem')}
           viewMode={viewMode}
           setViewMode={setViewMode}
+          isDarkMode={isDarkMode}
+          onToggleTheme={() => setIsDarkMode((prev) => !prev)}
         />
 
         {/* Main Content Layout Container */}
@@ -79,12 +114,14 @@ export default function App() {
                 onSeeAllCompanies={() => setActiveModal('all-companies')}
                 onVisitPortfolio={() => setActiveModal('portfolio')}
                 onOpenPromptCategory={() => setActiveModal('prompts')}
+                isDarkMode={isDarkMode}
               />
               <HeroCenter
                 currentProject={heroProject}
                 onDownloadApp={() => setActiveModal('download-app')}
                 onSeeReviews={() => setActiveModal('reviews')}
                 onVisitWebsite={() => handleOpenProjectDetail(heroProject)}
+                isDarkMode={isDarkMode}
               />
               <RightPanel
                 featuredProject={featuredProject}
@@ -92,6 +129,7 @@ export default function App() {
                 onListOfPrompts={() => setActiveModal('prompts')}
                 onEcosystemSupport={() => setActiveModal('ecosystem')}
                 onOpenProjectDetail={handleOpenProjectDetail}
+                isDarkMode={isDarkMode}
               />
             </div>
 
@@ -105,6 +143,7 @@ export default function App() {
                 onSeeReviews={() => setActiveModal('reviews')}
                 onDownloadApp={() => setActiveModal('download-app')}
                 onOpenProjectDetail={handleOpenProjectDetail}
+                isDarkMode={isDarkMode}
               />
             </div>
           </div>
@@ -118,12 +157,14 @@ export default function App() {
               onSeeAllCompanies={() => setActiveModal('all-companies')}
               onVisitPortfolio={() => setActiveModal('portfolio')}
               onOpenPromptCategory={() => setActiveModal('prompts')}
+              isDarkMode={isDarkMode}
             />
             <HeroCenter
               currentProject={heroProject}
               onDownloadApp={() => setActiveModal('download-app')}
               onSeeReviews={() => setActiveModal('reviews')}
               onVisitWebsite={() => handleOpenProjectDetail(heroProject)}
+              isDarkMode={isDarkMode}
             />
             <RightPanel
               featuredProject={featuredProject}
@@ -131,6 +172,7 @@ export default function App() {
               onListOfPrompts={() => setActiveModal('prompts')}
               onEcosystemSupport={() => setActiveModal('ecosystem')}
               onOpenProjectDetail={handleOpenProjectDetail}
+              isDarkMode={isDarkMode}
             />
           </div>
         )}
@@ -148,6 +190,7 @@ export default function App() {
         selectedProject={selectedProjectForModal}
         onSelectCompany={setSelectedCompany}
         onAddReview={handleAddReview}
+        isDarkMode={isDarkMode}
       />
     </div>
   );
