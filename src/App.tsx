@@ -4,6 +4,9 @@ import { LeftPanel } from './components/LeftPanel';
 import { HeroCenter } from './components/HeroCenter';
 import { RightPanel } from './components/RightPanel';
 import { MobileFrame } from './components/MobileFrame';
+import { MachineryTelemetrySection } from './components/MachineryTelemetrySection';
+import { PromptWorkbenchSection } from './components/PromptWorkbenchSection';
+import { ResearchRadarSection } from './components/ResearchRadarSection';
 import { Modals } from './components/Modals';
 import { COMPANIES, PROJECTS, PROMPTS, REVIEWS } from './data/mockData';
 import { Company, Project, PromptTemplate, Review } from './types';
@@ -176,6 +179,13 @@ export default function App() {
             />
           </div>
         )}
+
+        {/* 3 Additional Interactive Sections */}
+        <div className="mt-8 space-y-8">
+          <MachineryTelemetrySection isDarkMode={isDarkMode} />
+          <PromptWorkbenchSection promptTemplates={prompts} isDarkMode={isDarkMode} />
+          <ResearchRadarSection isDarkMode={isDarkMode} />
+        </div>
       </div>
 
       {/* Global Modals for Interactive Features */}
