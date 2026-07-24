@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { Grid2X2, Menu, ArrowRight, QrCode, ArrowUpRight, Sparkles, Heart, MessageSquare } from 'lucide-react';
 import { Company, Project } from '../types';
 
@@ -24,8 +25,11 @@ export const MobileFrame: React.FC<MobileFrameProps> = ({
   isDarkMode = false,
 }) => {
   return (
-    <div
-      className={`w-[340px] sm:w-[375px] shrink-0 rounded-[44px] p-3.5 border-4 relative mx-auto my-auto transition-all duration-300 ${
+    <motion.div
+      initial={{ opacity: 0, scale: 0.96, y: 16 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+      className={`w-[340px] sm:w-[375px] shrink-0 rounded-[44px] p-3.5 border-4 relative mx-auto my-auto transition-colors duration-300 ${
         isDarkMode
           ? 'bg-slate-950 border-cyan-500/50 shadow-[0_0_35px_rgba(6,182,212,0.3)]'
           : 'bg-neutral-900 border-neutral-800 shadow-2xl'
@@ -203,6 +207,6 @@ export const MobileFrame: React.FC<MobileFrameProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

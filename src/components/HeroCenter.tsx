@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { ArrowRight, QrCode, ArrowUpRight, Sparkles } from 'lucide-react';
 import { Project } from '../types';
 
@@ -18,8 +19,11 @@ export const HeroCenter: React.FC<HeroCenterProps> = ({
   isDarkMode = false,
 }) => {
   return (
-    <div
-      className={`backdrop-blur-md rounded-[28px] p-5 sm:p-6 flex flex-col justify-between transition-all duration-300 w-full min-h-[640px] border ${
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+      className={`backdrop-blur-md rounded-[28px] p-5 sm:p-6 flex flex-col justify-between transition-colors duration-300 w-full min-h-[640px] border ${
         isDarkMode
           ? 'bg-slate-900/90 border-cyan-500/30 text-slate-100 shadow-[0_0_20px_rgba(6,182,212,0.12)] hover:border-cyan-500/50 hover:shadow-[0_0_25px_rgba(6,182,212,0.2)]'
           : 'bg-white/90 border-neutral-200/90 text-neutral-900 shadow-sm hover:shadow-md'
@@ -179,6 +183,6 @@ export const HeroCenter: React.FC<HeroCenterProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
