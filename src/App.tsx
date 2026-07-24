@@ -110,10 +110,54 @@ export default function App() {
         />
 
         {/* Main Content Layout Container */}
-        {viewMode === 'mobile-device' ? (
-          /* Side-by-side mode: Workspace Grid + Standalone Mobile Device Frame */
-          <div className="flex flex-col xl:flex-row items-center xl:items-start justify-center gap-6 my-auto py-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 flex-1 w-full">
+        <div id="workspace">
+          {viewMode === 'mobile-device' ? (
+            /* Side-by-side mode: Workspace Grid + Standalone Mobile Device Frame */
+            <div className="flex flex-col xl:flex-row items-center xl:items-start justify-center gap-6 my-auto py-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 flex-1 w-full">
+                <LeftPanel
+                  companies={companies}
+                  selectedCompany={selectedCompany}
+                  onSelectCompany={setSelectedCompany}
+                  onSeeAllCompanies={() => setActiveModal('all-companies')}
+                  onVisitPortfolio={() => setActiveModal('portfolio')}
+                  onOpenPromptCategory={() => setActiveModal('prompts')}
+                  isDarkMode={isDarkMode}
+                />
+                <HeroCenter
+                  currentProject={heroProject}
+                  onDownloadApp={() => setActiveModal('download-app')}
+                  onSeeReviews={() => setActiveModal('reviews')}
+                  onVisitWebsite={() => handleOpenProjectDetail(heroProject)}
+                  isDarkMode={isDarkMode}
+                />
+                <RightPanel
+                  featuredProject={featuredProject}
+                  onInviteFriends={() => setActiveModal('invite')}
+                  onListOfPrompts={() => setActiveModal('prompts')}
+                  onEcosystemSupport={() => setActiveModal('ecosystem')}
+                  onOpenProjectDetail={handleOpenProjectDetail}
+                  isDarkMode={isDarkMode}
+                />
+              </div>
+
+              {/* Mobile Device Frame Container (Matching right side of the user prompt screenshot) */}
+              <div className="hidden xl:block">
+                <MobileFrame
+                  company={selectedCompany}
+                  project={heroProject}
+                  onJoinUsClick={() => setActiveModal('join')}
+                  onSeeAllCompanies={() => setActiveModal('all-companies')}
+                  onSeeReviews={() => setActiveModal('reviews')}
+                  onDownloadApp={() => setActiveModal('download-app')}
+                  onOpenProjectDetail={handleOpenProjectDetail}
+                  isDarkMode={isDarkMode}
+                />
+              </div>
+            </div>
+          ) : (
+            /* Standard 3-Column Responsive Workspace Layout */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-auto py-2 w-full">
               <LeftPanel
                 companies={companies}
                 selectedCompany={selectedCompany}
@@ -139,56 +183,14 @@ export default function App() {
                 isDarkMode={isDarkMode}
               />
             </div>
-
-            {/* Mobile Device Frame Container (Matching right side of the user prompt screenshot) */}
-            <div className="hidden xl:block">
-              <MobileFrame
-                company={selectedCompany}
-                project={heroProject}
-                onJoinUsClick={() => setActiveModal('join')}
-                onSeeAllCompanies={() => setActiveModal('all-companies')}
-                onSeeReviews={() => setActiveModal('reviews')}
-                onDownloadApp={() => setActiveModal('download-app')}
-                onOpenProjectDetail={handleOpenProjectDetail}
-                isDarkMode={isDarkMode}
-              />
-            </div>
-          </div>
-        ) : (
-          /* Standard 3-Column Responsive Workspace Layout */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-auto py-2 w-full">
-            <LeftPanel
-              companies={companies}
-              selectedCompany={selectedCompany}
-              onSelectCompany={setSelectedCompany}
-              onSeeAllCompanies={() => setActiveModal('all-companies')}
-              onVisitPortfolio={() => setActiveModal('portfolio')}
-              onOpenPromptCategory={() => setActiveModal('prompts')}
-              isDarkMode={isDarkMode}
-            />
-            <HeroCenter
-              currentProject={heroProject}
-              onDownloadApp={() => setActiveModal('download-app')}
-              onSeeReviews={() => setActiveModal('reviews')}
-              onVisitWebsite={() => handleOpenProjectDetail(heroProject)}
-              isDarkMode={isDarkMode}
-            />
-            <RightPanel
-              featuredProject={featuredProject}
-              onInviteFriends={() => setActiveModal('invite')}
-              onListOfPrompts={() => setActiveModal('prompts')}
-              onEcosystemSupport={() => setActiveModal('ecosystem')}
-              onOpenProjectDetail={handleOpenProjectDetail}
-              isDarkMode={isDarkMode}
-            />
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Interactive Application Sections */}
         <div className="mt-8 space-y-8">
-          <MachineryTelemetrySection isDarkMode={isDarkMode} />
-          <PromptWorkbenchSection promptTemplates={prompts} isDarkMode={isDarkMode} />
-          <ResearchRadarSection isDarkMode={isDarkMode} />
+          <div id="telemetry"><MachineryTelemetrySection isDarkMode={isDarkMode} /></div>
+          <div id="workbench"><PromptWorkbenchSection promptTemplates={prompts} isDarkMode={isDarkMode} /></div>
+          <div id="radar"><ResearchRadarSection isDarkMode={isDarkMode} /></div>
           <div id="benchmarks"><ModelBenchmarksSection isDarkMode={isDarkMode} /></div>
           <div id="sdk-hub"><SDKHubSection isDarkMode={isDarkMode} /></div>
           <div id="community"><CommunityFeedSection isDarkMode={isDarkMode} /></div>
