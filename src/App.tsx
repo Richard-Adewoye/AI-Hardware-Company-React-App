@@ -7,6 +7,10 @@ import { MobileFrame } from './components/MobileFrame';
 import { MachineryTelemetrySection } from './components/MachineryTelemetrySection';
 import { PromptWorkbenchSection } from './components/PromptWorkbenchSection';
 import { ResearchRadarSection } from './components/ResearchRadarSection';
+import { ModelBenchmarksSection } from './components/ModelBenchmarksSection';
+import { SDKHubSection } from './components/SDKHubSection';
+import { CommunityFeedSection } from './components/CommunityFeedSection';
+import { Footer } from './components/Footer';
 import { Modals } from './components/Modals';
 import { COMPANIES, PROJECTS, PROMPTS, REVIEWS } from './data/mockData';
 import { Company, Project, PromptTemplate, Review } from './types';
@@ -180,12 +184,18 @@ export default function App() {
           </div>
         )}
 
-        {/* 3 Additional Interactive Sections */}
+        {/* Interactive Application Sections */}
         <div className="mt-8 space-y-8">
           <MachineryTelemetrySection isDarkMode={isDarkMode} />
           <PromptWorkbenchSection promptTemplates={prompts} isDarkMode={isDarkMode} />
           <ResearchRadarSection isDarkMode={isDarkMode} />
+          <div id="benchmarks"><ModelBenchmarksSection isDarkMode={isDarkMode} /></div>
+          <div id="sdk-hub"><SDKHubSection isDarkMode={isDarkMode} /></div>
+          <div id="community"><CommunityFeedSection isDarkMode={isDarkMode} /></div>
         </div>
+
+        {/* Global Footer */}
+        <Footer isDarkMode={isDarkMode} onOpenModal={(modal) => setActiveModal(modal)} />
       </div>
 
       {/* Global Modals for Interactive Features */}
