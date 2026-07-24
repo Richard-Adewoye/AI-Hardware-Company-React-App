@@ -1,0 +1,6 @@
+{
+  "name": "Aempore AI - Futuristic Machineries",
+  "description": "Replication of Aempore AI website layout featuring 3D glassmorphic project showcases, company statistics, member networking wheel, and interactive prompt libraries.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
