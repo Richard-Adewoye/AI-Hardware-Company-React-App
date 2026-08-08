@@ -28,6 +28,7 @@ export default function App() {
   const [selectedProjectForModal, setSelectedProjectForModal] = useState<Project | null>(null);
   const [viewMode, setViewMode] = useState<'desktop' | 'mobile-device' | 'stacked'>('desktop');
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const heroProject = projects[0]; // Futuristic Machineries (03)
   const featuredProject = projects[1]; // Customer Segmentation (04)
@@ -112,6 +113,11 @@ export default function App() {
           setViewMode={setViewMode}
           isDarkMode={isDarkMode}
           onToggleTheme={() => setIsDarkMode((prev) => !prev)}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          projects={projects}
+          prompts={prompts}
+          onOpenProjectDetail={handleOpenProjectDetail}
         />
 
         {/* Main Content Layout Container */}
@@ -196,11 +202,11 @@ export default function App() {
         {/* Interactive Application Sections */}
         <div className="mt-8 space-y-8">
           <div id="telemetry"><MachineryTelemetrySection isDarkMode={isDarkMode} /></div>
-          <div id="workbench"><PromptWorkbenchSection promptTemplates={prompts} isDarkMode={isDarkMode} /></div>
+          <div id="workbench"><PromptWorkbenchSection promptTemplates={prompts} isDarkMode={isDarkMode} searchQuery={searchQuery} /></div>
           <div id="radar"><ResearchRadarSection isDarkMode={isDarkMode} /></div>
           <div id="benchmarks"><ModelBenchmarksSection isDarkMode={isDarkMode} /></div>
           <div id="sdk-hub"><SDKHubSection isDarkMode={isDarkMode} /></div>
-          <div id="community"><CommunityFeedSection isDarkMode={isDarkMode} /></div>
+          <div id="community"><CommunityFeedSection isDarkMode={isDarkMode} searchQuery={searchQuery} /></div>
         </div>
 
         {/* Global Footer */}

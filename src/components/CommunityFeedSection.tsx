@@ -18,6 +18,7 @@ interface CommunityProject {
 
 interface CommunityFeedSectionProps {
   isDarkMode?: boolean;
+  searchQuery?: string;
 }
 
 const INITIAL_COMMUNITY_PROJECTS: CommunityProject[] = [
@@ -58,15 +59,18 @@ const INITIAL_COMMUNITY_PROJECTS: CommunityProject[] = [
 
 export const CommunityFeedSection: React.FC<CommunityFeedSectionProps> = ({
   isDarkMode = false,
+  searchQuery: globalSearchQuery = '',
 }) => {
   const [projects, setProjects] = useState<CommunityProject[]>(INITIAL_COMMUNITY_PROJECTS);
   const [filterCategory, setFilterCategory] = useState<string>('All');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
   const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>('');
   const [newDesc, setNewDesc] = useState<string>('');
   const [newCategory, setNewCategory] = useState<string>('Kinetic Robotics');
   const [submitSuccess, setSubmitSuccess] = useState<boolean>(false);
+
+  const searchQuery = globalSearchQuery || localSearchQuery;
 
   const categories = ['All', 'Kinetic Robotics', 'Neural Audio', 'Computer Vision'];
 
@@ -198,7 +202,7 @@ export const CommunityFeedSection: React.FC<CommunityFeedSectionProps> = ({
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => setLocalSearchQuery(e.target.value)}
             placeholder="Search projects..."
             className={`w-full pl-8 pr-3 py-1.5 rounded-full text-xs border outline-none transition-all ${
               isDarkMode

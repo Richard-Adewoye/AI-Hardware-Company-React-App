@@ -7,11 +7,13 @@ import { TiltCard } from './TiltCard';
 interface PromptWorkbenchSectionProps {
   promptTemplates: PromptTemplate[];
   isDarkMode?: boolean;
+  searchQuery?: string;
 }
 
 export const PromptWorkbenchSection: React.FC<PromptWorkbenchSectionProps> = ({
   promptTemplates,
   isDarkMode = false,
+  searchQuery = '',
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [customPrompt, setCustomPrompt] = useState<string>(
@@ -26,10 +28,17 @@ export const PromptWorkbenchSection: React.FC<PromptWorkbenchSectionProps> = ({
 
   const categories = ['All', 'Machine Learning', 'Computer Vision', 'Neural Synthesis', 'Data Analytics'];
 
-  const filteredPrompts =
-    selectedCategory === 'All'
-      ? promptTemplates
-      : promptTemplates.filter((p) => p.category === selectedCategory);
+  const queryLower = searchQuery.toLowerCase().trim();
+
+  const filteredPrompts = promptTemplates.filter((p) => {
+    const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
+    const matchesSearch =
+      !queryLower ||
+      p.title.toLowerCase().includes(queryLower) ||
+      p.category.toLowerCase().includes(queryLower) ||
+      p.promptText.toLowerCase().includes(queryLower);
+    return matchesCategory && matchesSearch;
+  });
 
   const handleCopyPrompt = (text: string, idx: number) => {
     navigator.clipboard.writeText(text);
@@ -181,61 +190,69 @@ export const PromptWorkbenchSection: React.FC<PromptWorkbenchSectionProps> = ({
 
         {/* Right Preset Prompt Cards Grid (7 Cols) */}
         <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          {filteredPrompts.map((item, idx) => (
-            <TiltCard
-              key={item.id}
-              className={`p-4 rounded-2xl border flex flex-col justify-between transition-all group ${
-                isDarkMode
-                  ? 'bg-slate-950/60 border-slate-800 hover:border-cyan-500/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.15)]'
-                  : 'bg-neutral-50/80 border-neutral-200/80 hover:border-neutral-400'
-              }`}
-            >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                      isDarkMode
-                        ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/30'
-                        : 'bg-white text-neutral-800 border border-neutral-200'
-                    }`}
-                  >
-                    {item.category}
-                  </span>
-                  <span className="text-[10px] text-slate-400 font-semibold">{item.copiesCount} uses</span>
+          {filteredPrompts.length === 0 ? (
+            <div className="col-span-full p-8 text-center rounded-2xl border border-dashed border-neutral-300 dark:border-slate-800">
+              <p className="text-xs font-medium text-neutral-500 dark:text-slate-400">
+                No prompt templates matched &ldquo;<span className="font-semibold text-neutral-800 dark:text-slate-200">{searchQuery}</span>&rdquo;.
+              </p>
+            </div>
+          ) : (
+            filteredPrompts.map((item, idx) => (
+              <TiltCard
+                key={item.id}
+                className={`p-4 rounded-2xl border flex flex-col justify-between transition-all group ${
+                  isDarkMode
+                    ? 'bg-slate-950/60 border-slate-800 hover:border-cyan-500/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.15)]'
+                    : 'bg-neutral-50/80 border-neutral-200/80 hover:border-neutral-400'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                        isDarkMode
+                          ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/30'
+                          : 'bg-white text-neutral-800 border border-neutral-200'
+                      }`}
+                    >
+                      {item.category}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-semibold">{item.copiesCount} uses</span>
+                  </div>
+
+                  <h3 className="text-xs font-bold mb-1.5 line-clamp-1">{item.title}</h3>
+                  <p className={`text-[11px] leading-relaxed line-clamp-3 ${isDarkMode ? 'text-slate-400' : 'text-neutral-500'}`}>
+                    "{item.promptText}"
+                  </p>
                 </div>
 
-                <h3 className="text-xs font-bold mb-1.5 line-clamp-1">{item.title}</h3>
-                <p className={`text-[11px] leading-relaxed line-clamp-3 ${isDarkMode ? 'text-slate-400' : 'text-neutral-500'}`}>
-                  "{item.promptText}"
-                </p>
-              </div>
+                <div className="pt-3 mt-3 border-t border-neutral-200/50 dark:border-slate-800/80 flex items-center justify-between">
+                  <button
+                    onClick={() => setCustomPrompt(item.promptText)}
+                    className={`text-[11px] font-bold transition-colors ${
+                      isDarkMode ? 'text-cyan-400 hover:text-cyan-300' : 'text-neutral-900 hover:text-neutral-700'
+                    }`}
+                  >
+                    Use in Studio →
+                  </button>
 
-              <div className="pt-3 mt-3 border-t border-neutral-200/50 dark:border-slate-800/80 flex items-center justify-between">
-                <button
-                  onClick={() => setCustomPrompt(item.promptText)}
-                  className={`text-[11px] font-bold transition-colors ${
-                    isDarkMode ? 'text-cyan-400 hover:text-cyan-300' : 'text-neutral-900 hover:text-neutral-700'
-                  }`}
-                >
-                  Use in Studio →
-                </button>
-
-                <button
-                  onClick={() => handleCopyPrompt(item.promptText, idx)}
-                  className={`p-1.5 rounded-lg border transition-all ${
-                    copiedIndex === idx
-                      ? 'bg-emerald-500 text-white border-emerald-500'
-                      : isDarkMode
-                      ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40'
-                      : 'bg-white border-neutral-200 text-neutral-700 hover:bg-neutral-100'
-                  }`}
-                  title="Copy Prompt Text"
-                >
-                  {copiedIndex === idx ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                </button>
-              </div>
-            </TiltCard>
-          ))}
+                  <button
+                    onClick={() => handleCopyPrompt(item.promptText, idx)}
+                    className={`p-1.5 rounded-lg border transition-all ${
+                      copiedIndex === idx
+                        ? 'bg-emerald-500 text-white border-emerald-500'
+                        : isDarkMode
+                        ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40'
+                        : 'bg-white border-neutral-200 text-neutral-700 hover:bg-neutral-100'
+                    }`}
+                    title="Copy Prompt Text"
+                  >
+                    {copiedIndex === idx ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </TiltCard>
+            ))
+          )}
         </div>
       </div>
     </motion.section>
