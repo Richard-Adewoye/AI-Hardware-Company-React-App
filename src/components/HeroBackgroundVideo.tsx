@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { Play, Pause, Volume2, VolumeX, Video, Sparkles, RefreshCw, Zap } from 'lucide-react';
 
 interface VideoOption {
@@ -147,7 +148,13 @@ export const HeroBackgroundVideo: React.FC<HeroBackgroundVideoProps> = ({
   }, [isDarkMode]);
 
   return (
-    <div className="relative rounded-[36px] overflow-hidden p-3 sm:p-5 border transition-all duration-500 my-2">
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      className="relative rounded-[36px] overflow-hidden p-3 sm:p-5 border transition-all duration-500 my-2"
+    >
       {/* Animated Video Background Layer */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <video
@@ -235,6 +242,6 @@ export const HeroBackgroundVideo: React.FC<HeroBackgroundVideoProps> = ({
 
       {/* Hero Section Inner Content */}
       <div className="relative z-10">{children}</div>
-    </div>
+    </motion.div>
   );
 };

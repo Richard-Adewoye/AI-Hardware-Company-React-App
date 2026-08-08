@@ -140,7 +140,11 @@ export const NetworkingWheel: React.FC<NetworkingWheelProps> = ({ isDarkMode = f
   });
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={`rounded-3xl p-5 sm:p-7 border transition-all duration-300 ${
         isDarkMode
           ? 'bg-slate-950/80 border-cyan-500/30 text-slate-100 shadow-[inset_0_0_20px_rgba(6,182,212,0.1)]'
@@ -441,6 +445,6 @@ export const NetworkingWheel: React.FC<NetworkingWheelProps> = ({ isDarkMode = f
           </motion.div>
         </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   );
 };
