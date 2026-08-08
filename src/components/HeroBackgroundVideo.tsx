@@ -70,6 +70,23 @@ export const HeroBackgroundVideo: React.FC<HeroBackgroundVideoProps> = ({
     setVideoLoaded(false);
   };
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const mouseRef = useRef<{ x: number; y: number; active: boolean }>({ x: -1000, y: -1000, active: false });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    mouseRef.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      active: true,
+    };
+  };
+
+  const handleMouseLeave = () => {
+    mouseRef.current.active = false;
+  };
+
   // Canvas particle animation overlaid over the background video
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -81,40 +98,117 @@ export const HeroBackgroundVideo: React.FC<HeroBackgroundVideoProps> = ({
     let width = (canvas.width = canvas.offsetWidth || 1000);
     let height = (canvas.height = canvas.offsetHeight || 600);
 
-    const particles: Array<{ x: number; y: number; vx: number; vy: number; radius: number; alpha: number }> = [];
-    for (let i = 0; i < 45; i++) {
+    // Main particle array
+    const particles: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      radius: number;
+      alpha: number;
+      baseAlpha: number;
+    }> = [];
+
+    const particleCount = 55;
+    for (let i = 0; i < particleCount; i++) {
+      const alpha = Math.random() * 0.5 + 0.3;
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.7,
-        vy: (Math.random() - 0.5) * 0.7,
-        radius: Math.random() * 2 + 1,
-        alpha: Math.random() * 0.5 + 0.2,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        radius: Math.random() * 2 + 1.2,
+        alpha,
+        baseAlpha: alpha,
       });
     }
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
+      const mouse = mouseRef.current;
+
+      // Draw Cursor Aura Glow
+      if (mouse.active && mouse.x >= 0 && mouse.y >= 0) {
+        const auraGlow = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 160);
+        if (isDarkMode) {
+          auraGlow.addColorStop(0, 'rgba(6, 182, 212, 0.25)');
+          auraGlow.addColorStop(0.5, 'rgba(16, 185, 129, 0.1)');
+          auraGlow.addColorStop(1, 'rgba(6, 182, 212, 0)');
+        } else {
+          auraGlow.addColorStop(0, 'rgba(6, 182, 212, 0.2)');
+          auraGlow.addColorStop(0.5, 'rgba(59, 130, 246, 0.08)');
+          auraGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        }
+        ctx.fillStyle = auraGlow;
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 160, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Small inner cursor ring
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 6, 0, Math.PI * 2);
+        ctx.strokeStyle = isDarkMode ? 'rgba(6, 182, 212, 0.8)' : 'rgba(14, 165, 233, 0.8)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+
+      // Update and draw particles
       for (let i = 0; i < particles.length; i++) {
         const p1 = particles[i];
+
+        // Mouse attraction & interaction
+        if (mouse.active) {
+          const mdx = mouse.x - p1.x;
+          const mdy = mouse.y - p1.y;
+          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+
+          if (mdist < 160) {
+            // Gently attract particles towards mouse
+            const force = (160 - mdist) / 160;
+            p1.x += (mdx / mdist) * force * 0.8;
+            p1.y += (mdy / mdist) * force * 0.8;
+
+            // Brighten particle near mouse
+            p1.alpha = Math.min(1, p1.baseAlpha + force * 0.5);
+
+            // Connect lines from cursor to particles within range
+            ctx.beginPath();
+            ctx.strokeStyle = isDarkMode
+              ? `rgba(6, 182, 212, ${0.45 * force})`
+              : `rgba(14, 165, 233, ${0.4 * force})`;
+            ctx.lineWidth = 1.2 * force;
+            ctx.moveTo(mouse.x, mouse.y);
+            ctx.lineTo(p1.x, p1.y);
+            ctx.stroke();
+          } else {
+            p1.alpha = p1.baseAlpha;
+          }
+        } else {
+          p1.alpha = p1.baseAlpha;
+        }
+
+        // Move particle with velocity
         p1.x += p1.vx;
         p1.y += p1.vy;
 
+        // Bounce at boundaries
         if (p1.x < 0 || p1.x > width) p1.vx *= -1;
         if (p1.y < 0 || p1.y > height) p1.vy *= -1;
 
+        // Particle-to-particle constellation lines
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p1.x - p2.x;
           const dy = p1.y - p2.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 100) {
+          if (dist < 110) {
+            const lineAlpha = 1 - dist / 110;
             ctx.beginPath();
             ctx.strokeStyle = isDarkMode
-              ? `rgba(6, 182, 212, ${0.2 * (1 - dist / 100)})`
-              : `rgba(0, 0, 0, ${0.12 * (1 - dist / 100)})`;
+              ? `rgba(6, 182, 212, ${0.22 * lineAlpha})`
+              : `rgba(0, 0, 0, ${0.12 * lineAlpha})`;
             ctx.lineWidth = 0.8;
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -122,8 +216,11 @@ export const HeroBackgroundVideo: React.FC<HeroBackgroundVideoProps> = ({
           }
         }
 
+        // Draw particle dot
         ctx.beginPath();
-        ctx.fillStyle = isDarkMode ? `rgba(6, 182, 212, ${p1.alpha})` : `rgba(0, 0, 0, ${p1.alpha * 0.5})`;
+        ctx.fillStyle = isDarkMode
+          ? `rgba(6, 182, 212, ${p1.alpha})`
+          : `rgba(15, 23, 42, ${p1.alpha * 0.75})`;
         ctx.arc(p1.x, p1.y, p1.radius, 0, Math.PI * 2);
         ctx.fill();
       }
@@ -149,6 +246,9 @@ export const HeroBackgroundVideo: React.FC<HeroBackgroundVideoProps> = ({
 
   return (
     <motion.div
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
