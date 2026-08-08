@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { HeaderNav } from './components/HeaderNav';
+import { ScrollProgressBar } from './components/ScrollProgressBar';
 import { LeftPanel } from './components/LeftPanel';
 import { HeroCenter } from './components/HeroCenter';
 import { RightPanel } from './components/RightPanel';
@@ -48,6 +49,9 @@ export default function App() {
           : 'bg-[#f3f2f0] text-neutral-900 selection:bg-neutral-900 selection:text-white'
       }`}
     >
+      {/* Top Scroll Progress Indicator */}
+      <ScrollProgressBar isDarkMode={isDarkMode} />
+
       {/* Background Architectural Grid Lines / Futuristic Cyber Glow */}
       <div className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-500">
         {isDarkMode ? (
