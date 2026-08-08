@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Gauge, Activity, Cpu, Sliders, Play, RotateCcw, ShieldCheck, AlertCircle, Zap } from 'lucide-react';
+import { TiltCard } from './TiltCard';
 
 interface MachineryTelemetrySectionProps {
   isDarkMode?: boolean;
@@ -104,7 +105,7 @@ export const MachineryTelemetrySection: React.FC<MachineryTelemetrySectionProps>
       {/* Grid Content */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
         {/* Metric 1: Vibration Frequency */}
-        <div
+        <TiltCard
           className={`p-4 rounded-2xl border transition-colors ${
             isDarkMode ? 'bg-slate-950/60 border-slate-800/80' : 'bg-neutral-50/80 border-neutral-200/80'
           }`}
@@ -126,10 +127,10 @@ export const MachineryTelemetrySection: React.FC<MachineryTelemetrySectionProps>
             />
           </div>
           <span className="text-[11px] font-medium text-emerald-500 mt-2 block">✓ Harmonics Stabilized</span>
-        </div>
+        </TiltCard>
 
         {/* Metric 2: Optical Laser Alignment */}
-        <div
+        <TiltCard
           className={`p-4 rounded-2xl border transition-colors ${
             isDarkMode ? 'bg-slate-950/60 border-slate-800/80' : 'bg-neutral-50/80 border-neutral-200/80'
           }`}
@@ -151,10 +152,10 @@ export const MachineryTelemetrySection: React.FC<MachineryTelemetrySectionProps>
             />
           </div>
           <span className="text-[11px] font-medium text-emerald-500 mt-2 block">✓ Beam Focal Point Target: 0.02nm</span>
-        </div>
+        </TiltCard>
 
         {/* Metric 3: Acoustic Dampening */}
-        <div
+        <TiltCard
           className={`p-4 rounded-2xl border transition-colors ${
             isDarkMode ? 'bg-slate-950/60 border-slate-800/80' : 'bg-neutral-50/80 border-neutral-200/80'
           }`}
@@ -176,10 +177,10 @@ export const MachineryTelemetrySection: React.FC<MachineryTelemetrySectionProps>
             />
           </div>
           <span className="text-[11px] font-medium text-indigo-400 mt-2 block">Active Wave Suppression</span>
-        </div>
+        </TiltCard>
 
         {/* Metric 4: System Thermal Load */}
-        <div
+        <TiltCard
           className={`p-4 rounded-2xl border transition-colors ${
             isDarkMode ? 'bg-slate-950/60 border-slate-800/80' : 'bg-neutral-50/80 border-neutral-200/80'
           }`}
@@ -201,7 +202,7 @@ export const MachineryTelemetrySection: React.FC<MachineryTelemetrySectionProps>
             />
           </div>
           <span className="text-[11px] font-medium text-amber-400 mt-2 block">Cryo-Cooling Pump Active</span>
-        </div>
+        </TiltCard>
       </div>
 
       {/* Sliders & Diagnostic Terminal */}

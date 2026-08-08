@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { BarChart3, Cpu, Zap, Activity, ShieldCheck, Layers, Gauge } from 'lucide-react';
+import { TiltCard } from './TiltCard';
 
 interface ModelBenchmarksSectionProps {
   isDarkMode?: boolean;
@@ -205,7 +206,7 @@ export const ModelBenchmarksSection: React.FC<ModelBenchmarksSectionProps> = ({
           const fillPercentage = Math.min(100, Math.max(10, (barValue / maxVal) * 100));
 
           return (
-            <div
+            <TiltCard
               key={model.id}
               className={`p-4 rounded-2xl border transition-all ${
                 model.id === 'm-aempore'
@@ -257,7 +258,7 @@ export const ModelBenchmarksSection: React.FC<ModelBenchmarksSectionProps> = ({
                   style={{ width: `${fillPercentage}%` }}
                 />
               </div>
-            </div>
+            </TiltCard>
           );
         })}
       </div>

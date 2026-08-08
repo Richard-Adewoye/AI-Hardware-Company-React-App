@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowUpRight, Heart, MessageSquare, Plus, UserPlus, Sparkles, HelpCircle } from 'lucide-react';
 import { Project } from '../types';
+import { TiltCard } from './TiltCard';
 
 interface RightPanelProps {
   featuredProject: Project;
@@ -194,7 +195,7 @@ export const RightPanel: React.FC<RightPanelProps> = ({
       </div>
 
       {/* Featured Card Block: Customer Segmentation for Ecommerce Platform */}
-      <div
+      <TiltCard
         onClick={() => onOpenProjectDetail(featuredProject)}
         className={`group relative cursor-pointer border rounded-2xl p-4 flex flex-col justify-between overflow-hidden transition-all duration-300 mt-6 ${
           isDarkMode
@@ -281,7 +282,7 @@ export const RightPanel: React.FC<RightPanelProps> = ({
             </button>
           </div>
         </div>
-      </div>
+      </TiltCard>
     </motion.div>
   );
 };

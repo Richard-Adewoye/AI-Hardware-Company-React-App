@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Users, Heart, MessageSquare, Plus, ExternalLink, Sparkles, Search, Check, Send } from 'lucide-react';
+import { TiltCard } from './TiltCard';
 
 interface CommunityProject {
   id: string;
@@ -211,7 +212,7 @@ export const CommunityFeedSection: React.FC<CommunityFeedSectionProps> = ({
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
         {filteredProjects.map((project) => (
-          <div
+          <TiltCard
             key={project.id}
             className={`p-5 rounded-2xl border flex flex-col justify-between transition-all group ${
               isDarkMode
@@ -289,7 +290,7 @@ export const CommunityFeedSection: React.FC<CommunityFeedSectionProps> = ({
                 <span>{project.comments} comments</span>
               </div>
             </div>
-          </div>
+          </TiltCard>
         ))}
       </div>
 

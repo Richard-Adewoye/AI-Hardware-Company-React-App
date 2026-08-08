@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Sparkles, Copy, Check, Terminal, Play, Wand2, SlidersHorizontal } from 'lucide-react';
 import { PromptTemplate } from '../types';
+import { TiltCard } from './TiltCard';
 
 interface PromptWorkbenchSectionProps {
   promptTemplates: PromptTemplate[];
@@ -181,7 +182,7 @@ export const PromptWorkbenchSection: React.FC<PromptWorkbenchSectionProps> = ({
         {/* Right Preset Prompt Cards Grid (7 Cols) */}
         <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           {filteredPrompts.map((item, idx) => (
-            <div
+            <TiltCard
               key={item.id}
               className={`p-4 rounded-2xl border flex flex-col justify-between transition-all group ${
                 isDarkMode
@@ -233,7 +234,7 @@ export const PromptWorkbenchSection: React.FC<PromptWorkbenchSectionProps> = ({
                   {copiedIndex === idx ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                 </button>
               </div>
-            </div>
+            </TiltCard>
           ))}
         </div>
       </div>
